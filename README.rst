@@ -1,3 +1,5 @@
+|pypi-badge|
+
 webcam-filters
 ==============
 
@@ -57,5 +59,11 @@ Blur background::
 
   $ webcam-filters --input-dev /dev/video0 --output-dev /dev/video3 --background-blur 50
 
+
 .. _Pipx: https://github.com/pypa/pipx
+
 .. _v4l2loopback_: https://github.com/umlaeute/v4l2loopback
+
+.. |pypi-badge| image:: https://img.shields.io/pypi/v/webcam-filters
+    :alt: PyPI
+    :target: https://pypi.org/project/webcam-filters/
