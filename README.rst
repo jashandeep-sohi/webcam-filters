@@ -25,7 +25,7 @@ Latest stable::
 
 Latest pre-release::
 
-  $ pipx install --pip-args "--pre" webcam-filters || pip install --user --pre webcam-filters
+  $ pipx install --pip-args='--pre' webcam-filters || pip install --user --pre webcam-filters
 
 Git::
 
