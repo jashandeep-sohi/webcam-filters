@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "webcam-filters"
+version = "0.1.0-alpha.0"
+description = "Add filters (background blur, etc) to your webcam on Linux"
+license = "GPL-3.0-only"
+authors = ["Jashandeep Sohi <jashandeep.s.sohi@gmail.com>"]
+readme = "README.rst"
+repository = "https://github.com/jashandeep-sohi/webcam-filters"
+keywords = ["webcam", "filters", "v4l2", "video-conferencing"]
+
+[tool.poetry.dependencies]
+python = ">=3.9,<3.10"
+importlib-metadata = {version = ">=1.0", python = "<3.8"}
+typer = {extras = ["all"], version = "^0.3.2"}
+opencv-contrib-python = "^4.5.3"
+mediapipe = "^0.8.6"
+av = "^8.0.3"
+
+[tool.poetry.scripts]
+webcam-filters = "webcam_filters:cli"
+
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
