@@ -49,13 +49,13 @@ on boot)::
 
 Usage
 -----
-Blur background::
-
-  $ webcam-filter --input-dev /dev/video0 --output-dev /dev/video3 --background-blur 0.5
-
 Passthrough (no-op)::
 
   $ webcam-filters --input-dev /dev/video0 --output-dev /dev/video3
+
+Blur background::
+
+  $ webcam-filters --input-dev /dev/video0 --output-dev /dev/video3 --background-blur 50
 
 .. _Pipx: https://github.com/pypa/pipx
 .. _v4l2loopback_: https://github.com/umlaeute/v4l2loopback
