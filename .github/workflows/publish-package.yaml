@@ -1,0 +1,16 @@
+name: Publish Package
+on:
+  release:
+    types:
+      - published
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Instal Poetry
+        run: pip install poetry
+      - name: Publish to PyPI
+        run: poetry publish --build -u '__token__' -p '${{ secrets.PYPI_API_TOKEN }}'
