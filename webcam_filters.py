@@ -58,7 +58,7 @@ def main(
         0, help="background blur intensity", min=0, max=200
     ),
     selfie_segmentation_model: SelfieSegmentationModel = typer.Option(
-        SelfieSegmentationModel.general, help="model used for selfie segmentation"
+        SelfieSegmentationModel.landscape, help="model used for selfie segmentation"
     ),
     max_target_latency: int = typer.Option(
         10,  help="maximum latency in nano-seconds to aim for", min=0
