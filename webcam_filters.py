@@ -108,6 +108,7 @@ def main(
             in_img.flags.writeable = False
             result = selfie_seg.process(in_img)
             in_img.flags.writeable = True
+            selfie_seg.reset()
 
             condition = numpy.stack((result.segmentation_mask,) * 3, axis=-1) > 0.1
             bg_img = cv2.boxFilter(out_img, -1, (background_blur, background_blur))
