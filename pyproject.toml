@@ -11,14 +11,15 @@ keywords = ["webcam", "filters", "v4l2", "video-conferencing"]
 [tool.poetry.dependencies]
 python = ">=3.9,<3.10"
 importlib-metadata = {version = ">=1.0", python = "<3.8"}
-typer = {extras = ["all"], version = "^0.3.2"}
 opencv-contrib-python = "^4.5.3"
 mediapipe = "^0.8.6"
-av = "^8.0.3"
+click = "^8.0.1"
+click-completion = "^0.5.2"
+rich = "^10.7.0"
+numpy = "^1.21.2"
 
 [tool.poetry.scripts]
-webcam-filters = "webcam_filters:cli"
-
+webcam-filters = "webcam_filters.main:cli"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
