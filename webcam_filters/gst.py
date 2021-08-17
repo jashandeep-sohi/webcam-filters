@@ -1,12 +1,15 @@
 import typing as t
 import logging
 import os
+import sys
+
 import gi
 
 gi.require_version("Gst", "1.0")
 gi.require_version("GstBase", "1.0")
 
 from fractions import Fraction
+from pathlib import Path
 
 from gi.repository import Gst, GObject, GstBase
 from rich.console import Console
@@ -26,7 +29,16 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
-os.environ["GST_PLUGIN_PATH"] = GST_PLUGIN_PATH
+# hack to let Gst.ElementFactory.make("...") to find custom plugins
+os.environ["GST_PLUGIN_PATH"] = ":".join(
+    [GST_PLUGIN_PATH] + os.environ.get("GST_PLUGIN_PATH", "").split(":")
+)
+
+# hack to ensure interperter path is on PATH so that custom plugins will use the correct interpeter
+os.environ["PATH"] = ":".join(
+    [str(Path(sys.executable).parent)] + os.environ.get("PATH", "").split(":")
+)
+
 GObject.threads_init()
 Gst.init(None)
 
