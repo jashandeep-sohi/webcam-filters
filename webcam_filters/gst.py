@@ -93,7 +93,6 @@ def add_filters(
         ),
         reverse=True
     )
-
     new_caps = Gst.Caps.new_empty()
     for s in structs:
         new_caps.append_structure(s)
@@ -148,17 +147,21 @@ def add_filters(
     need_selfie = background_blur or False
 
     if need_selfie:
+        selfie_queue = Gst.ElementFactory.make("queue", "selfie_queue")
         selfie = Gst.ElementFactory.make("selfie_seg")
         selfie.set_property("model", selfie_segmentation_model)
         selfie.set_property("threshold", selfie_segmentation_threshold)
-        pipeline.add(selfie)
-        tee.link(selfie)
+        pipeline.add(selfie_queue, selfie)
+        tee.link(selfie_queue)
+        selfie_queue.link(selfie)
 
     if background_blur:
+        blured_queue = Gst.ElementFactory.make("queue", "blured_queue")
         blured = Gst.ElementFactory.make("cv2_boxfilter")
         blured.set_property("ksize", background_blur)
-        pipeline.add(blured)
-        tee.link(blured)
+        pipeline.add(blured_queue, blured)
+        tee.link(blured_queue)
+        blured_queue.link(blured)
 
         where = Gst.ElementFactory.make("numpy_where")
         pipeline.add(where)
