@@ -4,6 +4,8 @@ from .click import (
     click,
     print_version,
     print_gstreamer_plugin_path,
+    install_completion,
+    show_completion,
 )
 from .mediapipe import (
     SelfieSegmentationModel,
@@ -86,6 +88,24 @@ from .gst import (
     is_flag=True,
     is_eager=True,
     callback=print_gstreamer_plugin_path,
+    expose_value=False,
+    show_default=False,
+)
+@click.option(
+    "--install-completion",
+    help="Install auto completion for the current shell and exit.",
+    is_flag=True,
+    is_eager=True,
+    callback=install_completion,
+    expose_value=False,
+    show_default=False,
+)
+@click.option(
+    "--show-completion",
+    help="Show auto completion for the current shell and exit.",
+    is_flag=True,
+    is_eager=True,
+    callback=show_completion,
     expose_value=False,
     show_default=False,
 )

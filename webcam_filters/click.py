@@ -3,6 +3,7 @@ import functools
 
 import click
 import click_completion
+import click_completion.core
 
 from . import __version__, GST_PLUGIN_PATH
 
@@ -12,6 +13,35 @@ click_completion.init()
 
 # monkey patch click option to show defaults by default
 click.option = functools.partial(click.option, show_default=True)
+
+
+def show_completion(
+    ctx: click.Context,
+    param: click.Parameter,
+    value: t.Any,
+) -> None:
+    """
+    Show auto completion and exit.
+    """
+    if not value or ctx.resilient_parsing:
+        return
+    click.echo(click_completion.core.get_code())
+    ctx.exit()
+
+
+def install_completion(
+    ctx: click.Context,
+    param: click.Parameter,
+    value: t.Any,
+) -> None:
+    """
+    Install auto completion and exit.
+    """
+    if not value or ctx.resilient_parsing:
+        return
+    shell, path = click_completion.core.install()
+    click.echo(f"{shell} completion installed at {path}")
+    ctx.exit()
 
 
 def print_version(
