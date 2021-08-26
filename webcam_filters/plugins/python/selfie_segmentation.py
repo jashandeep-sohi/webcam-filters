@@ -89,6 +89,7 @@ class SelfieSegmenter(GstBase.BaseTransform):
         super().__init__()
         self.model = DEFAULT_MODEL
         self.threshold = DEFAULT_THRESHOLD
+        self.set_qos_enabled(True)
 
     def do_get_property(self, prop: GObject.GParamSpec):
         if prop.name == "model":

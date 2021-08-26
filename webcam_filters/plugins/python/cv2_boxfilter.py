@@ -76,6 +76,7 @@ class BoxFilter(GstBase.BaseTransform):
     def __init__(self):
         super().__init__()
         self.ksize = DEFAULT_KSIZE
+        self.set_qos_enabled(True)
 
     def do_get_property(self, prop: GObject.GParamSpec):
         if prop.name == "ksize":
