@@ -46,9 +46,9 @@ Gst.init(None)
 def add_filters(
     input_dev: str,
     output_dev: str,
-    input_width: t.Optional[int],
-    input_height: t.Optional[int],
-    input_framerate: t.Optional[str],
+    input_width: int,
+    input_height: int,
+    input_framerate: Fraction,
     input_media_type: t.Optional[str],
     background_blur: t.Optional[int],
     selfie_segmentation_model: SelfieSegmentationModel,
@@ -57,48 +57,54 @@ def add_filters(
     """
     Run filters pipeline.
     """
-    src = Gst.ElementFactory.make("v4l2src")
-    src.set_property("device", input_dev)
-    src.set_state(Gst.State.READY)
-    caps = src.get_static_pad("src").query_caps(None)
+    caps = query_device_caps(input_dev)
 
-    src.set_state(Gst.State.NULL)
+    if caps is None:
+        click.echo(f"unable to determine capabilities for device {input_dev!r}")
+        raise click.Abort()
 
     structs = []
-    for c in caps:
-        keep = True
+    for s in caps:
+        if input_media_type is not None and input_media_type != s.get_name():
+            continue
 
-        if input_media_type is not None and input_media_type != c.get_name():
-            keep = False
+        s.fixate_field_nearest_int("width", input_width)
+        s.fixate_field_nearest_int("height", input_height)
+        s.fixate_field_nearest_fraction(
+            "framerate",
+            input_framerate.numerator,
+            input_framerate.denominator
+        )
+        structs.append(s)
 
-        if input_width is not None and input_width != c.get_value("width"):
-            keep = False
+    if not structs:
+        click.echo("unable to find a suitable input format")
+        raise click.Abort()
 
-        if input_height is not None and input_height != c.get_value("height"):
-            keep = False
+    def struct_sort_key(x):
+        _, width = x.get_int("width")
+        _, height = x.get_int("height")
+        _, fr_numerator, fr_denomantor = x.get_fraction("framerate")
+        return (
+            abs(input_width - width),
+            abs(input_height - height),
+            abs(input_framerate - Fraction(fr_numerator, fr_denomantor or 1))
+        )
 
-        if input_framerate is not None:
-            if input_framerate != str(c.get_value("framerate")):
-                keep = False
+    structs = sorted(structs, key=struct_sort_key)
 
-        if keep:
-            structs.append(c)
-
-    structs = sorted(
-        structs,
-        key=lambda x: (
-            Fraction(str(x.get_value("framerate"))),
-            x.get_value("width"),
-            x.get_value("height"),
-        ),
-        reverse=True
-    )
+    s = structs[0]
     new_caps = Gst.Caps.new_empty()
-    for s in structs:
-        new_caps.append_structure(s)
+    new_caps.append_structure(s)
+
+    click.echo(
+        f"Selectd input: media-type={s.get_name()}, width={s.get_value('width')} "
+        f"height={s.get_value('height')} framerate={s.get_value('framerate')}"
+    )
 
     pipeline = Gst.Pipeline.new()
 
+    src = Gst.ElementFactory.make("v4l2src")
     inputfilter = Gst.ElementFactory.make("capsfilter")
     decodebin = Gst.ElementFactory.make("decodebin")
     rgbconvert = Gst.ElementFactory.make("videoconvert")
@@ -108,6 +114,7 @@ def add_filters(
     sinkfilter = Gst.ElementFactory.make("capsfilter")
     sink = Gst.ElementFactory.make("v4l2sink")
 
+    src.set_property("device", input_dev)
     inputfilter.set_property("caps", new_caps)
     rgbfilter.set_property(
         "caps",
@@ -212,6 +219,26 @@ def on_bus_message(
     return True
 
 
+def query_device_caps(dev: str) -> t.Optional[Gst.Caps]:
+    src = Gst.ElementFactory.make("v4l2src")
+    src.set_property("device", dev)
+
+    src.set_state(Gst.State.READY)
+    res = src.get_state(1000)
+    pad = src.get_static_pad("src")
+
+    if res.state != Gst.State.READY or pad is None:
+        return None
+
+    caps = pad.query_caps(None)
+    src.set_state(Gst.State.NULL)
+
+    if caps.is_any():
+        return None
+
+    return caps
+
+
 def print_device_caps(
     ctx: click.Context,
     param: click.Parameter,
@@ -223,21 +250,9 @@ def print_device_caps(
     if not value or ctx.resilient_parsing:
         return
 
-    src = Gst.ElementFactory.make("v4l2src")
-    src.set_property("device", value)
+    caps = query_device_caps(value)
 
-    src.set_state(Gst.State.READY)
-    res = src.get_state(1000)
-    pad = src.get_static_pad("src")
-
-    if res.state != Gst.State.READY or pad is None:
-        click.echo(f"unable to determine capabilities for device {value!r}")
-        ctx.exit(1)
-
-    caps = pad.query_caps(None)
-    src.set_state(Gst.State.NULL)
-
-    if caps.is_any():
+    if caps is None:
         click.echo(f"unable to determine capabilities for device {value!r}")
         ctx.exit(1)
 

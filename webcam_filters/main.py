@@ -1,5 +1,6 @@
 import typing as t
 
+from fractions import Fraction
 from .click import (
     click,
     print_version,
@@ -25,26 +26,27 @@ from .gst import (
 )
 @click.option(
     "--input-width",
-    help="Input width.",
+    help="Preferred width.",
     type=int,
-    default=None,
+    default="1280",
 )
 @click.option(
     "--input-height",
-    help="Input height.",
+    help="Preferred height.",
     type=int,
-    default=None,
+    default="720",
 )
 @click.option(
     "--input-framerate",
-    help="Input framerate specified in fractional format (e.g. '30/1').",
-    type=str,
-    default=None,
+    help="Preferred framerate specified in fractional format (e.g. '30/1').",
+    type=Fraction,
+    default="30/1",
 )
 @click.option(
     "--input-media-type",
     help="""
-    Input media type (e.g. 'image/jpeg' or 'x-raw-video').
+    Input media type (e.g. 'image/jpeg' or 'video/x-raw').
+    If specified ONLY that type is allowed. Otherwise, everything is allowed.
     Use --list-dev-caps to see all available formats.
     """,
     type=str,
@@ -120,9 +122,9 @@ from .gst import (
 )
 def cli(
     input_dev: str,
-    input_width: t.Optional[int],
-    input_height: t.Optional[int],
-    input_framerate: t.Optional[str],
+    input_width: int,
+    input_height: int,
+    input_framerate: Fraction,
     input_media_type: t.Optional[str],
     output_dev: str,
     background_blur: t.Optional[int],
