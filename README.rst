@@ -50,6 +50,7 @@ Gstreamer
 - gstreamer-1.0 (e.g. https://archlinux.org/packages/extra/x86_64/gstreamer/)
 - gst-plugins-base (e.g. https://archlinux.org/packages/extra/x86_64/gst-plugins-base/)
 - gst-python (e.g. https://archlinux.org/packages/extra/x86_64/gst-python/)
+- gst-plugins-good (e.g. https://archlinux.org/packages/extra/x86_64/gst-plugins-good/)
 
 
 Installation
