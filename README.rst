@@ -61,17 +61,20 @@ isolated.
 Latest stable::
 
   $ pipx install --system-site-packages webcam-filters
+  $ # Or
   $ pip install --user webcam-filters
 
 Latest pre-release::
 
   $ pipx install --system-site-packages --pip-args='--pre' webcam-filters
+  $ # Or
   $ pip install --user --pre webcam-filters
 
 Git::
 
   $ url="git+https://github.com/jashandeep-sohi/webcam-filters.git"
   $ pipx install --system-site-packages "$url"
+  $ # Or
   $ pip install --user "$url"
 
 
