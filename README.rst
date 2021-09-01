@@ -6,7 +6,7 @@ webcam-filters
 Add filters (background blur, etc) to your webcam on Linux.
 
 Video conferencing applications tend to either lack video effects altogether or
-support only a limited set of capabilities on Linux (e.g. Zoom, Google Meets).
+support only a limited set of capabilities on Linux (e.g. Zoom [#]_, Google Meets [#]_).
 
 Goal here is to provide a virtual webcam via ``v4l2loopback`` with a common
 set of filters that can be used everywhere.
@@ -75,9 +75,13 @@ Git::
   $ pip install --user "$url"
 
 
+.. [#] Zoom desktop client supports background blur as of version 5.7.6. Zoom on web does not.
+
+.. [#] Google Meets supports background blur only on Chrome.
+
 .. _Pipx: https://github.com/pypa/pipx
 
-.. _v4l2loopback_: https://github.com/umlaeute/v4l2loopback
+.. _v4l2loopback: https://github.com/umlaeute/v4l2loopback
 
 .. |pypi-badge| image:: https://img.shields.io/pypi/v/webcam-filters
     :alt: PyPI
