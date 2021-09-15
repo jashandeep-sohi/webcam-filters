@@ -9,7 +9,7 @@ repository = "https://github.com/jashandeep-sohi/webcam-filters"
 keywords = ["webcam", "filters", "v4l2", "video-conferencing"]
 
 [tool.poetry.dependencies]
-python = ">=3.9,<3.10"
+python = ">=3.8,<3.10"
 importlib-metadata = {version = ">=1.0", python = "<3.8"}
 opencv-contrib-python = "^4.5.3"
 mediapipe = "^0.8.6"
