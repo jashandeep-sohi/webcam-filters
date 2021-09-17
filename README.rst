@@ -61,21 +61,23 @@ Nix
 The provided Nix_ package bundles all the necessary GStreamer dependencies and
 should "just work" on any distro.
 
+Setup the cache. This step is **optional**, but it should speed up
+the installation process::
+
+  $ nix-env -iA cachix -f https://cachix.org/api/v1/install
+  $ cachix use sohi
+
 Install a specific release version/tag::
 
   $ nix-env \
       --install \
-      --file https://github.com/jashandeep-sohi/webcam-filters/archive/refs/tags/v0.2.2.tar.gz \
-      --option extra-substituters https://sohi.cachix.org \
-      --option trusted-public-keys 'cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= sohi.cachix.org-1:kc+1e94Jt8SW31aCSNFUKYeJDDmMd5PhVXnJgE86xls='
+      --file https://github.com/jashandeep-sohi/webcam-filters/archive/refs/tags/v0.2.2.tar.gz
 
 Install a specific branch (e.g. ``master``)::
 
   $ nix-env \
       --install \
-      --file https://github.com/jashandeep-sohi/webcam-filters/archive/refs/heads/master.tar.gz \
-      --option extra-substituters https://sohi.cachix.org \
-      --option trusted-public-keys 'cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= sohi.cachix.org-1:kc+1e94Jt8SW31aCSNFUKYeJDDmMd5PhVXnJgE86xls='
+      --file https://github.com/jashandeep-sohi/webcam-filters/archive/refs/heads/master.tar.gz
 
 
 Pipx/Pip
