@@ -1,4 +1,4 @@
-|pypi-badge|
+|pypi-badge| |nix-ci-badge|
 
 webcam-filters
 ==============
@@ -63,11 +63,19 @@ should "just work" on any distro.
 
 Install a specific release version/tag::
 
-  $ nix-env --file https://github.com/jashandeep-sohi/webcam-filters/archive/refs/tags/v0.2.2.tar.gz --install
+  $ nix-env \
+      --install \
+      --file https://github.com/jashandeep-sohi/webcam-filters/archive/refs/tags/v0.2.2.tar.gz \
+      --option extra-substituters https://sohi.cachix.org \
+      --option trusted-public-keys 'cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= sohi.cachix.org-1:kc+1e94Jt8SW31aCSNFUKYeJDDmMd5PhVXnJgE86xls='
 
 Install a specific branch (e.g. ``master``)::
 
-  $ nix-env --file https://github.com/jashandeep-sohi/webcam-filters/archive/refs/heads/master.tar.gz --install
+  $ nix-env \
+      --install \
+      --file https://github.com/jashandeep-sohi/webcam-filters/archive/refs/heads/master.tar.gz \
+      --option extra-substituters https://sohi.cachix.org \
+      --option trusted-public-keys 'cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= sohi.cachix.org-1:kc+1e94Jt8SW31aCSNFUKYeJDDmMd5PhVXnJgE86xls='
 
 
 Pipx/Pip
@@ -109,3 +117,7 @@ Git::
 .. |pypi-badge| image:: https://img.shields.io/pypi/v/webcam-filters
     :alt: PyPI
     :target: https://pypi.org/project/webcam-filters/
+
+.. |nix-ci-badge| image:: https://github.com/jashandeep-sohi/webcam-filters/actions/workflows/update-nix-cache.yaml/badge.svg
+    :alt: Update Nix Cache
+    :target: https://github.com/jashandeep-sohi/webcam-filters/actions/workflows/update-nix-cache.yaml
