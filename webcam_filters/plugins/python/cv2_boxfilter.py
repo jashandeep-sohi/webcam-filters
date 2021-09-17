@@ -9,9 +9,6 @@ import numpy
 from gi.repository import Gst, GstBase, GLib, GObject
 
 
-GObject.threads_init()
-Gst.init(None)
-
 SRC_CAPS = Gst.Caps(Gst.Structure(
     "video/x-raw",
     format="RGB",

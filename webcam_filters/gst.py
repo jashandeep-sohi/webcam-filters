@@ -29,18 +29,27 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
-# hack to let Gst.ElementFactory.make("...") to find custom plugins
-os.environ["GST_PLUGIN_PATH"] = ":".join(
-    [GST_PLUGIN_PATH] + os.environ.get("GST_PLUGIN_PATH", "").split(":")
-)
 
-# hack to ensure interperter path is on PATH so that custom plugins will use the correct interpeter
-os.environ["PATH"] = ":".join(
-    [str(Path(sys.executable).parent)] + os.environ.get("PATH", "").split(":")
-)
+def init():
+    # hack to let Gst.ElementFactory.make("...") to find custom plugins
+    os.environ["GST_PLUGIN_PATH"] = ":".join(
+        [GST_PLUGIN_PATH] + os.environ.get("GST_PLUGIN_PATH", "").split(":")
+    )
 
-GObject.threads_init()
-Gst.init(None)
+    # hack to ensure interperter path is on PATH so that custom plugins will use the correct interpeter
+    os.environ["PATH"] = ":".join(
+        [str(Path(sys.executable).parent)] + os.environ.get("PATH", "").split(":")
+    )
+
+    # TODO: Find out why this is needed. On some systems (e.g. nixos) forking
+    # will cause Python plugins not to be loaded properly. No real harm in
+    # disabling it AFAIK.
+    os.environ["GST_REGISTRY_FORK"] = "no"
+
+    GObject.threads_init()
+    if not Gst.init_check(None):
+        raise RuntimeError("failed to initialize gstreamer")
+
 
 
 def add_filters(
@@ -57,6 +66,8 @@ def add_filters(
     """
     Run filters pipeline.
     """
+    init()
+
     caps = query_device_caps(input_dev)
 
     if caps is None:
@@ -247,6 +258,8 @@ def print_device_caps(
     """
     Print device capabilities and exit.
     """
+    init()
+
     if not value or ctx.resilient_parsing:
         return
 
