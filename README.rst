@@ -49,14 +49,32 @@ Gstreamer
 
 - gstreamer-1.0 (e.g. https://archlinux.org/packages/extra/x86_64/gstreamer/)
 - gst-plugins-base (e.g. https://archlinux.org/packages/extra/x86_64/gst-plugins-base/)
-- gst-python (e.g. https://archlinux.org/packages/extra/x86_64/gst-python/)
 - gst-plugins-good (e.g. https://archlinux.org/packages/extra/x86_64/gst-plugins-good/)
+- gst-python (e.g. https://archlinux.org/packages/extra/x86_64/gst-python/)
 
 
 Installation
 ------------
-You can either use `pipx` or `pip`. Pipx_ is recommend to keep dependencies
-isolated.
+
+Nix
+***
+The provided Nix_ package bundles all the necessary GStreamer dependencies and
+should "just work" on any distro.
+
+Install a specific release version/tag::
+
+  $ nix-env --file https://github.com/jashandeep-sohi/webcam-filters/archive/refs/tag/v0.2.2 --install
+
+Install a specific branch (e.g. ``master``)::
+
+  $ nix-env --file https://github.com/jashandeep-sohi/webcam-filters/archive/refs/heads/master --install
+
+
+Pipx/Pip
+********
+You can also use `pipx` or `pip`. Pipx_ is recommend to keep Python dependencies
+isolated. Keep in mind this will not install ``gst-python`` or any of the other
+GStreamer dependencies, so you'll have to install that yourself.
 
 Latest stable::
 
@@ -83,6 +101,8 @@ Git::
 .. [#] Google Meets supports background blur only on Chrome.
 
 .. _Pipx: https://github.com/pypa/pipx
+
+.. _Nix: https://nixos.org/download.html#nix-quick-install
 
 .. _v4l2loopback: https://github.com/umlaeute/v4l2loopback
 
