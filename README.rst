@@ -63,7 +63,7 @@ should "just work" on any distro.
 
 Install a specific release version/tag::
 
-  $ nix-env --file https://github.com/jashandeep-sohi/webcam-filters/archive/refs/tag/v0.2.2.tar.gz --install
+  $ nix-env --file https://github.com/jashandeep-sohi/webcam-filters/archive/refs/tags/v0.2.2.tar.gz --install
 
 Install a specific branch (e.g. ``master``)::
 
