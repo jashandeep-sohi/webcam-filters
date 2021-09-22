@@ -11,6 +11,7 @@ support only a limited set of capabilities on Linux (e.g. Zoom [#]_, Google Meet
 Goal here is to provide a virtual webcam via ``v4l2loopback`` with a common
 set of filters that can be used everywhere.
 
+
 Usage
 -----
 Passthrough (no-op)::
@@ -112,7 +113,7 @@ Git::
 
 .. _Pipx: https://github.com/pypa/pipx
 
-.. _Nix: https://nixos.org/download.html#nix-quick-install
+.. _Nix: https://nixos.org/download.html
 
 .. _v4l2loopback: https://github.com/umlaeute/v4l2loopback
 
