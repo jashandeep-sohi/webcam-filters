@@ -2,6 +2,7 @@ import typing as t
 import logging
 import os
 import sys
+import enum
 
 import gi
 
@@ -29,6 +30,10 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
+class HWDecoder(enum.Enum):
+    off = enum.auto()
+    vaapi = enum.auto()
+
 
 def init():
     # hack to let Gst.ElementFactory.make("...") to find custom plugins
@@ -51,7 +56,6 @@ def init():
         raise RuntimeError("failed to initialize gstreamer")
 
 
-
 def add_filters(
     input_dev: str,
     output_dev: str,
@@ -62,6 +66,7 @@ def add_filters(
     background_blur: t.Optional[int],
     selfie_segmentation_model: SelfieSegmentationModel,
     selfie_segmentation_threshold: int,
+    hwdec: HWDecoder
 ) -> None:
     """
     Run filters pipeline.
@@ -109,16 +114,29 @@ def add_filters(
     new_caps.append_structure(s)
 
     click.echo(
-        f"Selectd input: media-type={s.get_name()}, width={s.get_value('width')} "
+        f"Selected input: media-type={s.get_name()}, width={s.get_value('width')} "
         f"height={s.get_value('height')} framerate={s.get_value('framerate')}"
     )
+
+    enable_hwdec_plugins(hwdec)
 
     pipeline = Gst.Pipeline.new()
 
     src = Gst.ElementFactory.make("v4l2src")
     inputfilter = Gst.ElementFactory.make("capsfilter")
     decodebin = Gst.ElementFactory.make("decodebin")
-    rgbconvert = Gst.ElementFactory.make("videoconvert")
+
+    if hwdec == HWDecoder.vaapi:
+        # vaapipostproc doesn't seem to support going directly to RGB.
+        # Converting to RGBA in hardware and then to RGB in software is less
+        # CPU intensive than just doing it all in software.
+        rgbconvert = Gst.parse_bin_from_description(
+            "vaapipostproc ! video/x-raw, format=RGBA ! videoconvert",
+            True
+        )
+    else:
+        rgbconvert = Gst.ElementFactory.make("videoconvert")
+
     rgbfilter = Gst.ElementFactory.make("capsfilter")
     tee = Gst.ElementFactory.make("tee")
     sinkconvert = Gst.ElementFactory.make("videoconvert")
@@ -288,3 +306,29 @@ def print_device_caps(
     console.print(table)
 
     ctx.exit(0)
+
+
+def enable_hwdec_plugins(hwdec: HWDecoder) -> None:
+    if hwdec == HWDecoder.off:
+        return
+
+    reg = Gst.Registry.get()
+
+    if hwdec == HWDecoder.vaapi:
+        plugins = [
+            "vaapijpegdec",
+            "vaapimpeg2dec",
+            "vaapih264dec",
+            "vaapih265dec",
+            "vaapivc1dec",
+        ]
+
+        for p in plugins:
+            factory = Gst.ElementFactory.find(p)
+
+            if factory is None:
+                continue
+
+            factory.set_rank(Gst.Rank.PRIMARY + 1)
+
+            reg.add_feature(factory)

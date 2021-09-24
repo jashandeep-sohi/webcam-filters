@@ -14,6 +14,7 @@ from .mediapipe import (
 from .gst import (
   add_filters,
   print_device_caps,
+  HWDecoder,
 )
 
 
@@ -77,6 +78,12 @@ from .gst import (
     default=0.5,
 )
 @click.option(
+    "--hw-decoder",
+    help="Hardware decoder API to use.",
+    type=click.Choice([x.name for x in HWDecoder]),
+    default="off",
+)
+@click.option(
     "--list-dev-caps",
     help="List device capabilities (width, height, framerate, etc) and exit.",
     type=str,
@@ -130,6 +137,7 @@ def cli(
     background_blur: t.Optional[int],
     selfie_segmentation_model: str,
     selfie_segmentation_threshold: int,
+    hw_decoder: str,
     **kwargs
 ) -> None:
     """
@@ -146,4 +154,5 @@ def cli(
         background_blur,
         selfie_seg_model,
         selfie_segmentation_threshold,
+        HWDecoder[hw_decoder],
     )
