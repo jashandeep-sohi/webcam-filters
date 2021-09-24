@@ -1,6 +1,6 @@
 {
   nixpkgs ? import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/a3c4956cf9cb921d61b4a5c30df6ef1c07d2fae4.tar.gz") { },
-  poetry2nix ? import (fetchTarball "https://github.com/jashandeep-sohi/poetry2nix/archive/3efdf3d0fced9f333fcc8a8970031305e9fdf0d2.tar.gz") { pkgs = nixpkgs; poetry = nixpkgs.poetry; },
+  poetry2nix ? import (fetchTarball "https://github.com/nix-community/poetry2nix/archive/refs/tags/1.20.0.tar.gz") { pkgs = nixpkgs; poetry = nixpkgs.poetry; },
 }:
   poetry2nix.mkPoetryApplication {
     projectDir = ./.;
