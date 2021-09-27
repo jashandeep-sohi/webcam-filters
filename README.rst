@@ -55,6 +55,7 @@ Gstreamer
 - gst-plugins-base (e.g. https://archlinux.org/packages/extra/x86_64/gst-plugins-base/)
 - gst-plugins-good (e.g. https://archlinux.org/packages/extra/x86_64/gst-plugins-good/)
 - Optional:
+
   - gstreamer-vaapi for hardware acceleration (e.g.
     https://archlinux.org/packages/extra/x86_64/gstreamer-vaapi/)
 
