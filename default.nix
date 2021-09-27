@@ -21,6 +21,7 @@
       nixpkgs.gst_all_1.gstreamer
       nixpkgs.gst_all_1.gst-plugins-base
       nixpkgs.gst_all_1.gst-plugins-good
+      nixpkgs.gst_all_1.gst-vaapi
     ];
 
     propagatedBuildInputs = [

@@ -49,9 +49,12 @@ Gstreamer
 *********
 
 - gstreamer-1.0 (e.g. https://archlinux.org/packages/extra/x86_64/gstreamer/)
+- gst-python (e.g. https://archlinux.org/packages/extra/x86_64/gst-python/)
 - gst-plugins-base (e.g. https://archlinux.org/packages/extra/x86_64/gst-plugins-base/)
 - gst-plugins-good (e.g. https://archlinux.org/packages/extra/x86_64/gst-plugins-good/)
-- gst-python (e.g. https://archlinux.org/packages/extra/x86_64/gst-python/)
+- Optional:
+  - gstreamer-vaapi for hardware acceleration (e.g.
+    https://archlinux.org/packages/extra/x86_64/gstreamer-vaapi/)
 
 
 Installation
@@ -79,6 +82,18 @@ Install a specific branch (e.g. ``master``)::
   $ nix-env \
       --install \
       --file https://github.com/jashandeep-sohi/webcam-filters/archive/refs/heads/master.tar.gz
+
+VAAPI
+.....
+For VAAPI support with Nix on non-NixOS systems use nixGL_::
+
+  $ nix-env \
+      --file https://github.com/guibou/nixGL/archive/main.tar.gz \
+      --install \
+      --attr auto.nixGLDefault \
+      --arg enable32bits false
+  $ export LIBVA_DRIVER_NAME=iHD # Or whatever works with your GPU
+  $ nixGL webcam-filters --input-dev /dev/video0 --output-dev /dev/video3 --hw-decoder vaapi
 
 
 Pipx/Pip
@@ -114,6 +129,8 @@ Git::
 .. _Pipx: https://github.com/pypa/pipx
 
 .. _Nix: https://nixos.org/download.html
+
+.. _nixGL: https://github.com/guibou/nixGL
 
 .. _v4l2loopback: https://github.com/umlaeute/v4l2loopback
 
