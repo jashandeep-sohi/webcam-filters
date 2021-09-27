@@ -1,0 +1,18 @@
+name: Nix Build
+on:
+  pull_request:
+  push:
+    branches-ignore:
+      - master
+
+jobs:
+  nix-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: cachix/install-nix-action@v14
+      - uses: cachix/cachix-action@v10
+        with:
+          name: sohi
+          skipPush: true
+      - run: nix-build
