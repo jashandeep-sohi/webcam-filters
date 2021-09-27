@@ -1,6 +1,8 @@
 name: Update Nix Cache
 on:
   push:
+    branches: 
+      - master
 
 jobs:
   update:
