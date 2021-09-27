@@ -52,9 +52,9 @@ SINK_PAD_TEMPLATE = Gst.PadTemplate.new_with_gtype(
 class Where(GstBase.Aggregator):
 
     __gstmetadata__ = (
-        "OpenCV Boxfilter",
+        "NumPy Where",
         "Filter",
-        "Apply boxfilter",
+        "numpy.where as a GStreamer Element",
         "Jashandeep Sohi <jashandeep.s.sohi@gmail.com>"
     )
 
@@ -76,7 +76,33 @@ class Where(GstBase.Aggregator):
 
         self._allocator, self._allocator_params = self.get_allocator()
 
+    def do_fixate_src_caps(self, caps):
+        caps = caps.intersect(self._condition.get_current_caps())
+        caps = caps.intersect(self._x.get_current_caps())
+        caps = caps.intersect(self._y.get_current_caps())
+        return caps.fixate()
+
     def do_negotiated_src_caps(self, caps):
+        Gst.info(f"src caps: '{caps}'")
+
+        cond_caps = self._condition.get_current_caps()
+        Gst.info(f"condition caps: '{cond_caps}'")
+        if not cond_caps.is_equal_fixed(caps):
+            Gst.error(f"condition caps != src caps")
+            return False
+
+        x_caps = self._x.get_current_caps()
+        Gst.info(f"x caps: '{x_caps}'")
+        if not x_caps.is_equal_fixed(caps):
+            Gst.error(f"x caps != src caps")
+            return False
+
+        y_caps = self._y.get_current_caps()
+        Gst.info(f"y caps: '{y_caps}'")
+        if not y_caps.is_equal_fixed(caps):
+            Gst.error(f"y caps != src caps")
+            return False
+
         s = caps.get_structure(0)
         self._width = s.get_int("width").value
         self._height = s.get_int("height").value
@@ -88,9 +114,6 @@ class Where(GstBase.Aggregator):
         )
 
         return True
-
-    def do_fixate_src_caps(self, caps):
-        return self._condition.get_current_caps()
 
     def do_aggregate(self, timeout):
         try:
