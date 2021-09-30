@@ -7,7 +7,11 @@
     python = nixpkgs.python3;
     preferWheels = true;
 
-    overrides = poetry2nix.overrides.withDefaults (self: super: { cython = null; });
+    overrides = poetry2nix.overrides.withDefaults (self: super: {
+      cython = null;
+
+      zipp = super.zipp.overridePythonAttrs (old: { prePatch = null; });
+    });
 
     # https://github.com/NixOS/nixpkgs/issues/56943
     strictDeps = false;
