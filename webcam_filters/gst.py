@@ -279,7 +279,7 @@ def on_bus_message(
 
     elif mtype == Gst.MessageType.ERROR:
         gerror, debug = message.parse_error()
-        click.echo(f"Error from {message.src}: {gerror.message}")
+        click.echo(f"Error from {src_path}: {gerror.message}")
         if verbose:
             click.echo(f"Debug: {debug}")
 
@@ -287,13 +287,13 @@ def on_bus_message(
 
     elif mtype == Gst.MessageType.WARNING:
         gerror, debug = message.parse_warning()
-        click.echo(f"Warning from {message.src}: {gerror.message}")
+        click.echo(f"Warning from {src_path}: {gerror.message}")
         if verbose:
             click.echo(f"Debug: {debug}")
 
     elif mtype == Gst.MessageType.INFO:
         gerror, debug = message.parse_info()
-        click.echo(f"Info from {message.src}: {gerror.message}")
+        click.echo(f"Info from {src_path}: {gerror.message}")
         if verbose:
             click.echo(f"Debug: {debug}")
 
