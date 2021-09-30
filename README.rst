@@ -82,7 +82,7 @@ Install a specific release version/tag::
 
   $ nix-env \
       --install \
-      --file https://github.com/jashandeep-sohi/webcam-filters/archive/refs/tags/v0.2.2.tar.gz
+      --file https://github.com/jashandeep-sohi/webcam-filters/archive/refs/tags/v0.3.0.tar.gz
 
 Install a specific branch (e.g. ``master``)::
 
