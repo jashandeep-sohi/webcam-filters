@@ -1,5 +1,4 @@
 import typing as t
-import logging
 import os
 import sys
 import enum
@@ -24,10 +23,6 @@ from .click import (
 )
 
 from . import GST_PLUGIN_PATH
-
-
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
 
 
 RGB_FORMATS = [
@@ -86,6 +81,7 @@ def add_filters(
     selfie_segmentation_model: SelfieSegmentationModel,
     selfie_segmentation_threshold: int,
     hw_accel_api: HardwareAccelAPI,
+    verbose: bool,
 ) -> None:
     """
     Run filters pipeline.
@@ -246,9 +242,13 @@ def add_filters(
 
 
     loop = GObject.MainLoop()
+
+    if verbose:
+        pipeline.add_property_deep_notify_watch(None, True)
+
     bus = pipeline.get_bus()
     bus.add_signal_watch()
-    bus.connect("message", on_bus_message, loop)
+    bus.connect("message", on_bus_message, loop, verbose, pipeline)
 
     pipeline.set_state(Gst.State.PLAYING)
     try:
@@ -262,19 +262,58 @@ def add_filters(
 def on_bus_message(
     bus: Gst.Bus,
     message: Gst.Message,
-    loop: GObject.MainLoop
+    loop: GObject.MainLoop,
+    verbose: bool,
+    pipeline: Gst.Pipeline,
 ) -> bool:
     mtype = message.type
+    src = message.src
+    src_path = src.get_path_string()
+
+    if verbose:
+        click.echo(f"\nsrc: {src_path}")
+        click.echo(f"type: {mtype}")
 
     if mtype == Gst.MessageType.EOS:
         loop.quit()
+
     elif mtype == Gst.MessageType.ERROR:
-        logger.error("%s: %s", *message.parse_error())
+        gerror, debug = message.parse_error()
+        click.echo(f"Error from {src_path}: {gerror.message}")
+        if verbose:
+            click.echo(f"Debug: {debug}")
+
         loop.quit()
+
     elif mtype == Gst.MessageType.WARNING:
-        logger.warning("%s: %s", *message.parse_warning())
+        gerror, debug = message.parse_warning()
+        click.echo(f"Warning from {src_path}: {gerror.message}")
+        if verbose:
+            click.echo(f"Debug: {debug}")
+
     elif mtype == Gst.MessageType.INFO:
-        logger.info("%s: %s", *message.parse_info())
+        gerror, debug = message.parse_info()
+        click.echo(f"Info from {src_path}: {gerror.message}")
+        if verbose:
+            click.echo(f"Debug: {debug}")
+
+    elif mtype == Gst.MessageType.PROPERTY_NOTIFY and verbose:
+        obj, name, value = message.parse_property_notify()
+
+        click.echo(f"{name}: {value}")
+
+    elif mtype == Gst.MessageType.STATE_CHANGED and src == pipeline:
+        old, new, pending = message.parse_state_changed()
+
+        click.echo("Pipeline: ", nl=False)
+        if new == Gst.State.PAUSED:
+            click.echo("PAUSED")
+        elif new == Gst.State.READY:
+            click.echo("READY")
+        elif new == Gst.State.PLAYING:
+            click.echo("RUNNING")
+        elif new == Gst.State.NULL:
+            click.echo("NULL")
 
     return True
 

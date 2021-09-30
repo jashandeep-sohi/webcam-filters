@@ -84,6 +84,13 @@ from .gst import (
     default=HardwareAccelAPI.off.name,
 )
 @click.option(
+    "--verbose",
+    help="Enable verbose output.",
+    is_flag=True,
+    default=False,
+    show_default=False,
+)
+@click.option(
     "--list-dev-caps",
     help="List device capabilities (width, height, framerate, etc) and exit.",
     type=str,
@@ -138,6 +145,7 @@ def cli(
     selfie_segmentation_model: str,
     selfie_segmentation_threshold: int,
     hw_accel_api: str,
+    verbose: bool,
     **kwargs
 ) -> None:
     """
@@ -154,4 +162,5 @@ def cli(
         SelfieSegmentationModel[selfie_segmentation_model],
         selfie_segmentation_threshold,
         HardwareAccelAPI[hw_accel_api],
+        verbose,
     )
