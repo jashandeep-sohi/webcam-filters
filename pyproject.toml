@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "webcam-filters"
-version = "0.2.2"
+version = "0.3.0-alpha.0"
 description = "Add filters (background blur, etc) to your webcam on Linux"
 license = "GPL-3.0-only"
 authors = ["Jashandeep Sohi <jashandeep.s.sohi@gmail.com>"]
