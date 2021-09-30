@@ -14,7 +14,7 @@ from .mediapipe import (
 from .gst import (
   add_filters,
   print_device_caps,
-  HWDecoder,
+  HardwareAccelAPI,
 )
 
 
@@ -78,10 +78,10 @@ from .gst import (
     default=0.5,
 )
 @click.option(
-    "--hw-decoder",
-    help="Hardware decoder API to use.",
-    type=click.Choice([x.name for x in HWDecoder]),
-    default="off",
+    "--hw-accel-api",
+    help="Hardware acceleration API to use.",
+    type=click.Choice([x.name for x in HardwareAccelAPI]),
+    default=HardwareAccelAPI.off.name,
 )
 @click.option(
     "--list-dev-caps",
@@ -137,13 +137,12 @@ def cli(
     background_blur: t.Optional[int],
     selfie_segmentation_model: str,
     selfie_segmentation_threshold: int,
-    hw_decoder: str,
+    hw_accel_api: str,
     **kwargs
 ) -> None:
     """
     Add video filters to your webcam.
     """
-    selfie_seg_model = SelfieSegmentationModel[selfie_segmentation_model]
     add_filters(
         input_dev,
         output_dev,
@@ -152,7 +151,7 @@ def cli(
         input_framerate,
         input_media_type,
         background_blur,
-        selfie_seg_model,
+        SelfieSegmentationModel[selfie_segmentation_model],
         selfie_segmentation_threshold,
-        HWDecoder[hw_decoder],
+        HardwareAccelAPI[hw_accel_api],
     )

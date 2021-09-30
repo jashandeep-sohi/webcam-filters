@@ -30,7 +30,26 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
-class HWDecoder(enum.Enum):
+RGB_FORMATS = [
+    "RGB",
+
+    "RGBx",
+    "xRGB",
+
+    "RGBA",
+    "ARGB",
+
+    "BGR",
+
+    "BGRx",
+    "xBGR",
+
+    "BGRA",
+    "ABGR",
+]
+
+
+class HardwareAccelAPI(enum.Enum):
     off = enum.auto()
     vaapi = enum.auto()
 
@@ -66,7 +85,7 @@ def add_filters(
     background_blur: t.Optional[int],
     selfie_segmentation_model: SelfieSegmentationModel,
     selfie_segmentation_threshold: int,
-    hwdec: HWDecoder
+    hw_accel_api: HardwareAccelAPI,
 ) -> None:
     """
     Run filters pipeline.
@@ -118,20 +137,23 @@ def add_filters(
         f"height={s.get_value('height')} framerate={s.get_value('framerate')}"
     )
 
-    enable_hwdec_plugins(hwdec)
+    enable_hwdec_plugins(hw_accel_api)
 
     pipeline = Gst.Pipeline.new()
 
     src = Gst.ElementFactory.make("v4l2src")
     inputfilter = Gst.ElementFactory.make("capsfilter")
-    decodebin = Gst.ElementFactory.make("decodebin")
+    decodebin = Gst.ElementFactory.make("decodebin3")
 
-    if hwdec == HWDecoder.vaapi:
-        # vaapipostproc doesn't seem to support going directly to RGB.
-        # Converting to RGBA in hardware and then to RGB in software is less
-        # CPU intensive than just doing it all in software.
+    if hw_accel_api == HardwareAccelAPI.vaapi:
+        # vaapipostproc doesn't seem to support going directly to RGB on some
+        # hardware. So prefer direct RGB conversion if possible, otherwise
+        # fallback to some variant of RGBA and then use videoconvert to
+        # to get to RGB.
+        c= ";".join(f"video/x-raw, format={f}" for f in reversed(RGB_FORMATS))
         rgbconvert = Gst.parse_bin_from_description(
-            "vaapipostproc ! video/x-raw, format=RGBA ! videoconvert",
+            f"capsfilter caps=video/x-raw(memory:VASurface) ! "
+            f"vaapipostproc ! {c} ! videoconvert",
             True
         )
     else:
@@ -139,7 +161,16 @@ def add_filters(
 
     rgbfilter = Gst.ElementFactory.make("capsfilter")
     tee = Gst.ElementFactory.make("tee")
-    sinkconvert = Gst.ElementFactory.make("videoconvert")
+
+    if hw_accel_api == HardwareAccelAPI.vaapi:
+        c = ";".join(f"video/x-raw, format={f}" for f in RGB_FORMATS)
+        sinkconvert = Gst.parse_bin_from_description(
+            f"videoconvert ! {c} ! vaapipostproc",
+            True
+        )
+    else:
+        sinkconvert = Gst.ElementFactory.make("videoconvert")
+
     sinkfilter = Gst.ElementFactory.make("capsfilter")
     sink = Gst.ElementFactory.make("v4l2sink")
 
@@ -308,13 +339,13 @@ def print_device_caps(
     ctx.exit(0)
 
 
-def enable_hwdec_plugins(hwdec: HWDecoder) -> None:
-    if hwdec == HWDecoder.off:
+def enable_hwdec_plugins(api: HardwareAccelAPI) -> None:
+    if api == HardwareAccelAPI.off:
         return
 
     reg = Gst.Registry.get()
 
-    if hwdec == HWDecoder.vaapi:
+    if api == HardwareAccelAPI.vaapi:
         plugins = [
             "vaapijpegdec",
             "vaapimpeg2dec",
