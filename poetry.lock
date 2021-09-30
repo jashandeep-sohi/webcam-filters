@@ -249,8 +249,8 @@ test = ["pytest (>=3.0.0)", "pytest-cov"]
 
 [metadata]
 lock-version = "1.1"
-python-versions = ">=3.9,<3.10"
-content-hash = "931cab98ad458d4c15c6e613298a750c2da2f0395e6daf85098d0599832631f5"
+python-versions = ">=3.8,<3.10"
+content-hash = "2212739a138a87b47375bcdaa4602e717ff005e9ccbd8b0c8c9d21331765032c"
 
 [metadata.files]
 absl-py = [
