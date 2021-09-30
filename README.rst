@@ -23,6 +23,10 @@ Passthrough (no-op)::
 Blur background::
 
   $ webcam-filters --input-dev /dev/video0 --output-dev /dev/video3 --background-blur 150
+  
+Hardware acceleration (via VAAPI)::
+
+  $ webcam-filters --input-dev /dev/video0 --output-dev /dev/video3 --background-blur 150 --hw-accel-api vaapi
 
 Dependencies
 ------------
@@ -86,8 +90,8 @@ Install a specific branch (e.g. ``master``)::
       --install \
       --file https://github.com/jashandeep-sohi/webcam-filters/archive/refs/heads/master.tar.gz
 
-VAAPI
-.....
+Hardware Acceleration
+.....................
 For VAAPI support with Nix on non-NixOS systems use nixGL_::
 
   $ nix-env \
@@ -96,7 +100,9 @@ For VAAPI support with Nix on non-NixOS systems use nixGL_::
       --attr auto.nixGLDefault \
       --arg enable32bits false
   $ export LIBVA_DRIVER_NAME=iHD # Or whatever works with your GPU
-  $ nixGL webcam-filters --input-dev /dev/video0 --output-dev /dev/video3 --hw-decoder vaapi
+  $ nixGL webcam-filters --input-dev /dev/video0 --output-dev /dev/video3 --hw-accel-api vaapi
+
+On NixOS follow https://nixos.wiki/wiki/Accelerated_Video_Playback
 
 
 Pipx/Pip
