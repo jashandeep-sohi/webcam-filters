@@ -142,7 +142,7 @@ python-dateutil = ">=2.7"
 
 [[package]]
 name = "mediapipe"
-version = "0.8.7.3"
+version = "0.8.8"
 description = "MediaPipe is the simplest way for researchers and developers to build world-class ML solutions and applications for mobile, edge, cloud and the web."
 category = "main"
 optional = false
@@ -156,7 +156,6 @@ numpy = "*"
 opencv-contrib-python = "*"
 protobuf = ">=3.11.4"
 six = "*"
-wheel = "*"
 
 [[package]]
 name = "numpy"
@@ -253,17 +252,6 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*"
 
 [[package]]
-name = "wheel"
-version = "0.37.0"
-description = "A built-package format for Python"
-category = "main"
-optional = false
-python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
-
-[package.extras]
-test = ["pytest (>=3.0.0)", "pytest-cov"]
-
-[[package]]
 name = "zipp"
 version = "3.6.0"
 description = "Backport of pathlib-compatible object wrapper for zip files"
@@ -278,7 +266,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8,<3.10"
-content-hash = "8aa364550a2824816f27e9efc0392c4f6f437fb997fb104aec750954bf892d08"
+content-hash = "e4cec8ed875caa7c91bdd25d7067b99c3f924e7da95d42dffbf333def78c884a"
 
 [metadata.files]
 absl-py = [
@@ -442,15 +430,15 @@ matplotlib = [
     {file = "matplotlib-3.4.3.tar.gz", hash = "sha256:fc4f526dfdb31c9bd6b8ca06bf9fab663ca12f3ec9cdf4496fb44bc680140318"},
 ]
 mediapipe = [
-    {file = "mediapipe-0.8.7.3-cp37-cp37m-macosx_10_15_x86_64.whl", hash = "sha256:e4cb5009be8f225bfe5949d3ced1c850be6dd81be0913fdcac29d93a08b14350"},
-    {file = "mediapipe-0.8.7.3-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:b86fa15c8e83593199fdc212b16d0201a239f897be5f8f01c8724c2cf657b343"},
-    {file = "mediapipe-0.8.7.3-cp37-cp37m-win_amd64.whl", hash = "sha256:efbe829ec352e72d35c160d8562cc5fef08055f2534d2f02572afef5288de993"},
-    {file = "mediapipe-0.8.7.3-cp38-cp38-macosx_10_15_x86_64.whl", hash = "sha256:20af9f924ad3e77ea739203c4ab444de13166786afea82a617474cba9abd2e5d"},
-    {file = "mediapipe-0.8.7.3-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:bccab5633332c2443c11164737228b15155df9725e6c27be0ba72867a0976fce"},
-    {file = "mediapipe-0.8.7.3-cp38-cp38-win_amd64.whl", hash = "sha256:9b636cbe9b76c16cc0385f06b172a7c34314db85c4f85cde53fd631c2cdc5b42"},
-    {file = "mediapipe-0.8.7.3-cp39-cp39-macosx_10_15_x86_64.whl", hash = "sha256:f91e2d094ae9442f3f87603e71ac6f3fcac759bfb0d362cc21d675d57794fa7c"},
-    {file = "mediapipe-0.8.7.3-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:e834cc53ff0628ab060585ebc781b3f24d0b481c744e820466a49998c1352d0a"},
-    {file = "mediapipe-0.8.7.3-cp39-cp39-win_amd64.whl", hash = "sha256:d0b3eaf3540fe0599fe99405cca10e682dcaf524d95ae79cdfe8a3c3816a095c"},
+    {file = "mediapipe-0.8.8-cp37-cp37m-macosx_10_15_x86_64.whl", hash = "sha256:c115be97b61f407b08bebd1808f96cf50bee4f6175fa2c96b2545972b2487d51"},
+    {file = "mediapipe-0.8.8-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:227eec64d0a653f0c2679cef6272c4a4b0d9305e8645fa9acc2d17d1b02bc0e1"},
+    {file = "mediapipe-0.8.8-cp37-cp37m-win_amd64.whl", hash = "sha256:2580422090bf681610443fccd09215a3a2c864be6c3f0652b05f7b2dfa76c7b5"},
+    {file = "mediapipe-0.8.8-cp38-cp38-macosx_10_15_x86_64.whl", hash = "sha256:40b65522a5cd5687dada8e924560fc828ed0bd736e4f5c78122fff5e296bb67b"},
+    {file = "mediapipe-0.8.8-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:9578fe33e1c22292be1e0fe34d06d9f5aaad74532f8d8d5fa1b3d264aba16575"},
+    {file = "mediapipe-0.8.8-cp38-cp38-win_amd64.whl", hash = "sha256:eea0383fac9a4d2652d825658259600136fa40fdbdc68733f23578d4c71cb828"},
+    {file = "mediapipe-0.8.8-cp39-cp39-macosx_10_15_x86_64.whl", hash = "sha256:9f27aa312ac4c9435dd3337ec3a7225172b33c3f7ff4c7c7579cb5a3a000fdb1"},
+    {file = "mediapipe-0.8.8-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:a96d43d3aceb1fc1e76624283b93c2fbc98af33d4771927153d866c328bc1597"},
+    {file = "mediapipe-0.8.8-cp39-cp39-win_amd64.whl", hash = "sha256:113d846c51b419c0403ed3101595280dd4698fc498fd32ff323ab317a2d967eb"},
 ]
 numpy = [
     {file = "numpy-1.21.2-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:52a664323273c08f3b473548bf87c8145b7513afd63e4ebba8496ecd3853df13"},
@@ -611,10 +599,6 @@ shellingham = [
 six = [
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
     {file = "six-1.16.0.tar.gz", hash = "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926"},
-]
-wheel = [
-    {file = "wheel-0.37.0-py2.py3-none-any.whl", hash = "sha256:21014b2bd93c6d0034b6ba5d35e4eb284340e09d63c59aef6fc14b0f346146fd"},
-    {file = "wheel-0.37.0.tar.gz", hash = "sha256:e2ef7239991699e3355d54f8e968a21bb940a1dbf34a4d226741e64462516fad"},
 ]
 zipp = [
     {file = "zipp-3.6.0-py3-none-any.whl", hash = "sha256:9fe5ea21568a0a70e50f273397638d39b03353731e6cbbb3fd8502a33fec40bc"},
