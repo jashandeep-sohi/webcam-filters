@@ -1,5 +1,6 @@
 import typing as t
 import functools
+import enum
 
 import click
 import click_completion
@@ -13,6 +14,26 @@ click_completion.init()
 
 # monkey patch click option to show defaults by default
 click.option = functools.partial(click.option, show_default=True)
+
+
+class EnumChoice(click.Choice):
+
+    def __init__(self, enum_type: t.Type[enum.Enum]) -> None:
+        self.enum_type = enum_type
+        super().__init__([c.name for c in self.enum_type])
+
+    def convert(
+        self,
+        value: t.Union[str, enum.Enum],
+        param: t.Optional[click.Parameter],
+        ctx: t.Optional[click.Context],
+    ) -> enum.Enum:
+        if isinstance(value, self.enum_type):
+            value = value.name
+
+        name = super().convert(value, param, ctx)
+
+        return self.enum_type[name]
 
 
 def show_completion(

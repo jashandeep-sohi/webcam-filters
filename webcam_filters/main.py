@@ -1,5 +1,3 @@
-import typing as t
-
 from fractions import Fraction
 from .click import (
     click,
@@ -7,14 +5,15 @@ from .click import (
     print_gstreamer_plugin_path,
     install_completion,
     show_completion,
+    EnumChoice,
 )
 from .mediapipe import (
     SelfieSegmentationModel,
 )
 from .gst import (
-  add_filters,
   print_device_caps,
   HardwareAccelAPI,
+  Pipeline
 )
 
 
@@ -68,8 +67,8 @@ from .gst import (
 @click.option(
     "--selfie-segmentation-model",
     help="Mediapipe model used for selfie segmentation",
-    type=click.Choice([x.name for x in SelfieSegmentationModel]),
-    default=SelfieSegmentationModel.general.name,
+    type=EnumChoice(SelfieSegmentationModel),
+    default=SelfieSegmentationModel.general,
 )
 @click.option(
     "--selfie-segmentation-threshold",
@@ -80,8 +79,8 @@ from .gst import (
 @click.option(
     "--hw-accel-api",
     help="Hardware acceleration API to use.",
-    type=click.Choice([x.name for x in HardwareAccelAPI]),
-    default=HardwareAccelAPI.off.name,
+    type=EnumChoice(HardwareAccelAPI),
+    default=HardwareAccelAPI.off,
 )
 @click.option(
     "--verbose",
@@ -97,6 +96,7 @@ from .gst import (
     is_eager=True,
     callback=print_device_caps,
     show_default=False,
+    expose_value=False,
 )
 @click.option(
     "--gst-plugin-path",
@@ -134,33 +134,10 @@ from .gst import (
     expose_value=False,
     show_default=False,
 )
-def cli(
-    input_dev: str,
-    input_width: int,
-    input_height: int,
-    input_framerate: Fraction,
-    input_media_type: t.Optional[str],
-    output_dev: str,
-    background_blur: t.Optional[int],
-    selfie_segmentation_model: str,
-    selfie_segmentation_threshold: int,
-    hw_accel_api: str,
-    verbose: bool,
-    **kwargs
-) -> None:
+def cli(**kwargs) -> None:
     """
     Add video filters to your webcam.
     """
-    add_filters(
-        input_dev,
-        output_dev,
-        input_width,
-        input_height,
-        input_framerate,
-        input_media_type,
-        background_blur,
-        SelfieSegmentationModel[selfie_segmentation_model],
-        selfie_segmentation_threshold,
-        HardwareAccelAPI[hw_accel_api],
-        verbose,
-    )
+    p = Pipeline(**kwargs)
+
+    p.run()
