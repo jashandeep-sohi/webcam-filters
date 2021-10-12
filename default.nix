@@ -9,8 +9,6 @@
 
     overrides = poetry2nix.overrides.withDefaults (self: super: {
       cython = null;
-
-      zipp = super.zipp.overridePythonAttrs (old: { prePatch = null; });
     });
 
     # https://github.com/NixOS/nixpkgs/issues/56943

@@ -16,7 +16,6 @@ click = "^8.0.1"
 click-completion = "^0.5.2"
 rich = "^10.7.0"
 numpy = "^1.21.2"
-importlib-metadata = "^4.8.1"
 
 [tool.poetry.scripts]
 webcam-filters = "webcam_filters.__main__:main"
