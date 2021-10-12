@@ -53,6 +53,23 @@ class HardwareAccelAPI(enum.Enum):
       return self.name
 
 
+class VaapiFeature(enum.Flag):
+    jpegdec = enum.auto()
+    mpeg2dec = enum.auto()
+    h264dec = enum.auto()
+    h265dec = enum.auto()
+    vc1dec = enum.auto()
+    vp8dec = enum.auto()
+    vp9dec = enum.auto()
+
+    rgbconvert = enum.auto()
+    sinkconvert = enum.auto()
+
+    decode = jpegdec | mpeg2dec | h264dec | h265dec | vc1dec | vp8dec | vp9dec
+
+    all = decode | rgbconvert | sinkconvert
+
+
 def init():
     # hack to let Gst.ElementFactory.make("...") to find custom plugins
     os.environ["GST_PLUGIN_PATH"] = ":".join(
@@ -87,11 +104,12 @@ class Pipeline:
     selfie_segmentation_threshold: int
     hw_accel_api: HardwareAccelAPI
     verbose: bool
+    vaapi_features: VaapiFeature
 
     def run(self):
         init()
 
-        self.enable_hwdec_plugins()
+        self.enable_hwdec_elements()
 
         pipeline = self.build_pipeline()
 
@@ -174,14 +192,16 @@ class Pipeline:
         inputfilter = Gst.ElementFactory.make("capsfilter")
         decodebin = Gst.ElementFactory.make("decodebin3")
 
-        if self.hw_accel_api == HardwareAccelAPI.vaapi:
+        if (
+            self.hw_accel_api == HardwareAccelAPI.vaapi and
+            VaapiFeature.rgbconvert in self.vaapi_features
+        ):
             # vaapipostproc doesn't seem to support going directly to RGB on some
             # hardware. So prefer direct RGB conversion if possible, otherwise
             # fallback to some variant of RGBA and then use videoconvert to
             # to get to RGB.
             c= ";".join(f"video/x-raw, format={f}" for f in reversed(RGB_FORMATS))
             rgbconvert = Gst.parse_bin_from_description(
-                f"capsfilter caps=video/x-raw(memory:VASurface) ! "
                 f"vaapipostproc ! {c} ! videoconvert",
                 True
             )
@@ -191,7 +211,10 @@ class Pipeline:
         rgbfilter = Gst.ElementFactory.make("capsfilter")
         tee = Gst.ElementFactory.make("tee")
 
-        if self.hw_accel_api == HardwareAccelAPI.vaapi:
+        if (
+            self.hw_accel_api == HardwareAccelAPI.vaapi and
+            VaapiFeature.sinkconvert in self.vaapi_features
+        ):
             c = ";".join(f"video/x-raw, format={f}" for f in RGB_FORMATS)
             sinkconvert = Gst.parse_bin_from_description(
                 f"videoconvert ! {c} ! vaapipostproc",
@@ -276,25 +299,30 @@ class Pipeline:
         return pipeline
 
 
-    def enable_hwdec_plugins(self) -> None:
+    def enable_hwdec_elements(self) -> None:
         if self.hw_accel_api == HardwareAccelAPI.off:
             return
 
         reg = Gst.Registry.get()
 
         if self.hw_accel_api == HardwareAccelAPI.vaapi:
-            plugins = [
-                "vaapijpegdec",
-                "vaapimpeg2dec",
-                "vaapih264dec",
-                "vaapih265dec",
-                "vaapivc1dec",
+            decoders = [
+                x.name for x in VaapiFeature
+                if (
+                  x != VaapiFeature.decode and
+                  x in VaapiFeature.decode and
+                  x in self.vaapi_features
+                )
             ]
 
-            for p in plugins:
-                factory = Gst.ElementFactory.find(p)
+            for d in decoders:
+                factory = Gst.ElementFactory.find(f"vaapi{d}")
 
                 if factory is None:
+                    click.secho(
+                        f"failed to find and enable element 'vaapi{d}'",
+                        fg="red"
+                    )
                     continue
 
                 factory.set_rank(Gst.Rank.PRIMARY + 1)

@@ -36,6 +36,63 @@ class EnumChoice(click.Choice):
         return self.enum_type[name]
 
 
+class FlagChoice(click.ParamType):
+
+    name = "flag choice"
+
+    def __init__(self, flag_type: t.Type[enum.Flag]) -> None:
+        self.flag_type = flag_type
+
+    def convert(
+        self,
+        value: t.Union[str, enum.Flag],
+        param: t.Optional[click.Parameter],
+        ctx: t.Optional[click.Context],
+    ) -> enum.Flag:
+        if isinstance(value, self.flag_type):
+            return value
+
+        value = str(value)
+
+        flags = [x.strip() for x in value.split(",")]
+
+        result = None
+
+        allowed_flags = self.flag_type.__members__.keys()
+
+        for i,f in enumerate(flags, 1):
+            if len(f) < 2 or f[0] not in {"+", "-"}:
+                self.fail(f"malformed flag '{f}' (pos {i})")
+
+            op = f[0]
+            name = f[1:]
+
+            if name not in allowed_flags:
+                c = ", ".join(allowed_flags)
+                self.fail(f"'{name}' (pos {i}) not in allowed flags: {c}")
+
+            if result is None:
+                result = self.flag_type[name]
+
+                if op == "-":
+                    result = ~result
+
+                continue
+
+            if op == "+":
+                result = result | self.flag_type[name]
+            else:
+                result = result & (~self.flag_type[name])
+
+        if result is None:
+            self.fail("at least one flag must be specified")
+
+        return result
+
+    def get_metavar(self, param: click.Parameter) -> str:
+        return "{+|-}FLAG[, ...]"
+
+
 def show_completion(
     ctx: click.Context,
     param: click.Parameter,
