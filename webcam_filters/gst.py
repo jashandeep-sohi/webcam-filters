@@ -188,9 +188,9 @@ class Pipeline:
 
         pipeline = Gst.Pipeline.new()
 
-        src = Gst.ElementFactory.make("v4l2src")
-        inputfilter = Gst.ElementFactory.make("capsfilter")
-        decodebin = Gst.ElementFactory.make("decodebin3")
+        src = make_element("v4l2src")
+        inputfilter = make_element("capsfilter")
+        decodebin = make_element("decodebin3")
 
         if (
             self.hw_accel_api == HardwareAccelAPI.vaapi and
@@ -206,10 +206,10 @@ class Pipeline:
                 True
             )
         else:
-            rgbconvert = Gst.ElementFactory.make("videoconvert")
+            rgbconvert = make_element("videoconvert")
 
-        rgbfilter = Gst.ElementFactory.make("capsfilter")
-        tee = Gst.ElementFactory.make("tee")
+        rgbfilter = make_element("capsfilter")
+        tee = make_element("tee")
 
         if (
             self.hw_accel_api == HardwareAccelAPI.vaapi and
@@ -221,10 +221,10 @@ class Pipeline:
                 True
             )
         else:
-            sinkconvert = Gst.ElementFactory.make("videoconvert")
+            sinkconvert = make_element("videoconvert")
 
-        sinkfilter = Gst.ElementFactory.make("capsfilter")
-        sink = Gst.ElementFactory.make("v4l2sink")
+        sinkfilter = make_element("capsfilter")
+        sink = make_element("v4l2sink")
 
         src.set_property("device", self.input_dev)
         inputfilter.set_property("caps", input_caps)
@@ -266,8 +266,8 @@ class Pipeline:
         need_selfie = self.background_blur or False
 
         if need_selfie:
-            selfie_queue = Gst.ElementFactory.make("queue", "selfie_queue")
-            selfie = Gst.ElementFactory.make("selfie_seg")
+            selfie_queue = make_element("queue", "selfie_queue")
+            selfie = make_element("selfie_seg")
             selfie.set_property("model", self.selfie_segmentation_model)
             selfie.set_property("threshold", self.selfie_segmentation_threshold)
             pipeline.add(selfie_queue, selfie)
@@ -275,14 +275,14 @@ class Pipeline:
             selfie_queue.link(selfie)
 
         if self.background_blur:
-            blured_queue = Gst.ElementFactory.make("queue", "blured_queue")
-            blured = Gst.ElementFactory.make("cv2_boxfilter")
+            blured_queue = make_element("queue", "blured_queue")
+            blured = make_element("cv2_boxfilter")
             blured.set_property("ksize", self.background_blur)
             pipeline.add(blured_queue, blured)
             tee.link(blured_queue)
             blured_queue.link(blured)
 
-            where = Gst.ElementFactory.make("numpy_where")
+            where = make_element("numpy_where")
             pipeline.add(where)
             selfie.get_static_pad("src").link(where.get_static_pad("condition"))
             tee.request_pad(tee.get_pad_template("src_%u"), None, None).link(
@@ -388,8 +388,17 @@ class Pipeline:
         return True
 
 
+def make_element(factoryname: str, name: t.Optional[str] = None) -> Gst.Element:
+    elm = Gst.ElementFactory.make(factoryname, name)
+
+    if elm is None:
+        raise RuntimeError(f"failed to create element '{factoryname}'")
+
+    return elm
+
+
 def query_device_caps(dev: str) -> t.Optional[Gst.Caps]:
-    src = Gst.ElementFactory.make("v4l2src")
+    src = make_element("v4l2src")
     src.set_property("device", dev)
 
     src.set_state(Gst.State.READY)
