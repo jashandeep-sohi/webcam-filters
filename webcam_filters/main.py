@@ -6,6 +6,7 @@ from .click import (
     install_completion,
     show_completion,
     EnumChoice,
+    FlagChoice,
 )
 from .mediapipe import (
     SelfieSegmentationModel,
@@ -13,7 +14,8 @@ from .mediapipe import (
 from .gst import (
   print_device_caps,
   HardwareAccelAPI,
-  Pipeline
+  Pipeline,
+  VaapiFeature,
 )
 
 
@@ -81,6 +83,17 @@ from .gst import (
     help="Hardware acceleration API to use.",
     type=EnumChoice(HardwareAccelAPI),
     default=HardwareAccelAPI.off,
+)
+@click.option(
+    "--vaapi-features",
+    help=f"""
+    FLAG := {' | '.join(str(x.name) for x in reversed(VaapiFeature))}
+
+    Comma seperated list of VAAPI features to enable or disable.
+    Prepending a "+" enables that feature, while a "-" disables it.
+    """,
+    type=FlagChoice(VaapiFeature),
+    default="+all",
 )
 @click.option(
     "--verbose",
