@@ -130,6 +130,15 @@ Git::
   $ # Or
   $ pip install --user "$url"
 
+Docker
+******
+The docker container wraps a Nix installation for those who prefer to have it dockerized. 
+
+Usage example::
+
+  $ docker build -t webcam-filters docker/
+  $ docker run --device=/dev/video0:/dev/input_video --device=/dev/video3:/dev/output_video -e background_blur=150 webcam-filters
+
 
 .. [#] Zoom desktop client supports background blur as of version 5.7.6. Zoom on web does not.
 
