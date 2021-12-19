@@ -23,7 +23,7 @@ Passthrough (no-op)::
 Blur background::
 
   $ webcam-filters --input-dev /dev/video0 --output-dev /dev/video3 --background-blur 150
-  
+
 Hardware acceleration (via VAAPI)::
 
   $ webcam-filters --input-dev /dev/video0 --output-dev /dev/video3 --background-blur 150 --hw-accel-api vaapi
@@ -132,12 +132,12 @@ Git::
 
 Docker
 ******
-The docker container wraps a Nix installation for those who prefer to have it dockerized. 
+The docker container wraps a Nix installation for those who prefer to have it dockerized.
 
 Usage example::
 
-  $ docker build -t webcam-filters docker/
-  $ docker run --device=/dev/video0:/dev/input_video --device=/dev/video3:/dev/output_video -e background_blur=150 webcam-filters
+  $ docker build -t webcam-filters .
+  $ docker run -it --device=/dev/video0:/input-dev --device=/dev/video3:/output-dev webcam-filters --background-blur 50
 
 
 .. [#] Zoom desktop client supports background blur as of version 5.7.6. Zoom on web does not.

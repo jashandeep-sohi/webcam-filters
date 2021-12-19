@@ -1,0 +1,13 @@
+# exclude everything
+*
+
+# include only
+! README.rst
+! default.nix
+! pyproject.toml
+! poetry.lock
+! poetry.toml
+! webcam_filters
+
+# exclude pycache
+**/*.pyc
