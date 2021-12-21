@@ -1,5 +1,5 @@
 {
-  nixpkgs ? import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/a3c4956cf9cb921d61b4a5c30df6ef1c07d2fae4.tar.gz") { },
+  nixpkgs ? import ./nixpkgs.nix { },
   poetry2nix ? import (fetchTarball "https://github.com/nix-community/poetry2nix/archive/refs/tags/1.20.0.tar.gz") { pkgs = nixpkgs; poetry = nixpkgs.poetry; },
 }:
   poetry2nix.mkPoetryApplication {

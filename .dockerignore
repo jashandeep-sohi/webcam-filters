@@ -3,7 +3,7 @@
 
 # include only
 ! README.rst
-! default.nix
+! *.nix
 ! pyproject.toml
 ! poetry.lock
 ! poetry.toml
