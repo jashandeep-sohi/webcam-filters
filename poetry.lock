@@ -18,10 +18,10 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [package.extras]
-dev = ["coverage[toml] (>=5.0.2)", "hypothesis", "pympler", "pytest (>=4.3.0)", "six", "mypy", "pytest-mypy-plugins", "zope.interface", "furo", "sphinx", "sphinx-notfound-page", "pre-commit"]
-docs = ["furo", "sphinx", "zope.interface", "sphinx-notfound-page"]
-tests = ["coverage[toml] (>=5.0.2)", "hypothesis", "pympler", "pytest (>=4.3.0)", "six", "mypy", "pytest-mypy-plugins", "zope.interface"]
-tests_no_zope = ["coverage[toml] (>=5.0.2)", "hypothesis", "pympler", "pytest (>=4.3.0)", "six", "mypy", "pytest-mypy-plugins"]
+dev = ["coverage[toml] (>=5.0.2)", "furo", "hypothesis", "mypy", "pre-commit", "pympler", "pytest (>=4.3.0)", "pytest-mypy-plugins", "six", "sphinx", "sphinx-notfound-page", "zope.interface"]
+docs = ["furo", "sphinx", "sphinx-notfound-page", "zope.interface"]
+tests = ["coverage[toml] (>=5.0.2)", "hypothesis", "mypy", "pympler", "pytest (>=4.3.0)", "pytest-mypy-plugins", "six", "zope.interface"]
+tests-no-zope = ["coverage[toml] (>=5.0.2)", "hypothesis", "mypy", "pympler", "pytest (>=4.3.0)", "pytest-mypy-plugins", "six"]
 
 [[package]]
 name = "click"
@@ -79,6 +79,14 @@ python-versions = "*"
 six = "*"
 
 [[package]]
+name = "flatbuffers"
+version = "22.10.26"
+description = "The FlatBuffers serialization format for Python"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "jinja2"
 version = "3.0.2"
 description = "A very fast and expressive template engine."
@@ -126,7 +134,7 @@ python-dateutil = ">=2.7"
 
 [[package]]
 name = "mediapipe"
-version = "0.8.10"
+version = "0.9.0"
 description = "MediaPipe is the simplest way for researchers and developers to build world-class ML solutions and applications for mobile, edge, cloud and the web."
 category = "main"
 optional = false
@@ -135,10 +143,11 @@ python-versions = "*"
 [package.dependencies]
 absl-py = "*"
 attrs = ">=19.1.0"
+flatbuffers = ">=2.0"
 matplotlib = "*"
 numpy = "*"
 opencv-contrib-python = "*"
-protobuf = ">=3.11.4"
+protobuf = ">=3.11,<4"
 
 [[package]]
 name = "numpy"
@@ -237,7 +246,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8,<3.10"
-content-hash = "fc669a8c36bf9793ee841d19cc9bafad1f20855d31e0aa5cc91f4cbf7dfe7b3a"
+content-hash = "6be34a65ebec287b532785dae64813f573081f91aa114a98c9bd8fff9f84dcfc"
 
 [metadata.files]
 absl-py = [
@@ -266,6 +275,10 @@ commonmark = [
 cycler = [
     {file = "cycler-0.10.0-py2.py3-none-any.whl", hash = "sha256:1d8a5ae1ff6c5cf9b93e8811e581232ad8920aeec647c37316ceac982b08cb2d"},
     {file = "cycler-0.10.0.tar.gz", hash = "sha256:cd7b2d1018258d7247a71425e9f26463dfb444d411c39569972f4ce586b0c9d8"},
+]
+flatbuffers = [
+    {file = "flatbuffers-22.10.26-py2.py3-none-any.whl", hash = "sha256:e36d5ba7a5e9483ff0ec1d238fdc3011c866aab7f8ce77d5e9d445ac12071d84"},
+    {file = "flatbuffers-22.10.26.tar.gz", hash = "sha256:8698aaa635ca8cf805c7d8414d4a4a8ecbffadca0325fa60551cb3ca78612356"},
 ]
 jinja2 = [
     {file = "Jinja2-3.0.2-py3-none-any.whl", hash = "sha256:8569982d3f0889eed11dd620c706d39b60c36d6d25843961f33f77fb6bc6b20c"},
@@ -412,18 +425,18 @@ matplotlib = [
     {file = "matplotlib-3.4.3.tar.gz", hash = "sha256:fc4f526dfdb31c9bd6b8ca06bf9fab663ca12f3ec9cdf4496fb44bc680140318"},
 ]
 mediapipe = [
-    {file = "mediapipe-0.8.10-cp310-cp310-macosx_10_15_x86_64.whl", hash = "sha256:65c6c8484783df1b9a9871900fee657adbfe6627ac6a06b5af65a0aa03f0b714"},
-    {file = "mediapipe-0.8.10-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:a3236c7b34f98d31cf254555f42de7346c94585a0e47435e2fa2f12d13bc6ca1"},
-    {file = "mediapipe-0.8.10-cp310-cp310-win_amd64.whl", hash = "sha256:01f8e0bd3ef81fc9f5091b1990632a0274f6e5cb095f2f74daa9dac7e955e4a2"},
-    {file = "mediapipe-0.8.10-cp37-cp37m-macosx_10_15_x86_64.whl", hash = "sha256:1ff3970f76dffbb16e04b1e0ba73fa6368e0d3fa4c0b6049dcbf58a3284347db"},
-    {file = "mediapipe-0.8.10-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:bc60486f5924d8c12caa41a22bb8e4389eb26477e757734897f76d08eea4d13b"},
-    {file = "mediapipe-0.8.10-cp37-cp37m-win_amd64.whl", hash = "sha256:0b55aae8f0ff7fe7da9b8d514cf0aa033866ea00f03dcac9ea65a5b04990d5c5"},
-    {file = "mediapipe-0.8.10-cp38-cp38-macosx_10_15_x86_64.whl", hash = "sha256:9f4db546d82a9fa05b7f2a0de77cb67abffe971ce03f9b3032977838de4e1870"},
-    {file = "mediapipe-0.8.10-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:7f6b584804eb65048ec394f496b79d87b30629adf8b9f16f395840b067515df6"},
-    {file = "mediapipe-0.8.10-cp38-cp38-win_amd64.whl", hash = "sha256:6f737950017abc47fa11f8b79737aac28124298b3f039342cdfe6f8c6c0857a4"},
-    {file = "mediapipe-0.8.10-cp39-cp39-macosx_10_15_x86_64.whl", hash = "sha256:65bf04ef1c742bf3d0596719e9dc4298b295a2b8dbf341df8a4039376483d3ee"},
-    {file = "mediapipe-0.8.10-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:5ffa89a718ef3c507e67e4de592173675740e4ae6164f807e5a9bff64f1e86a0"},
-    {file = "mediapipe-0.8.10-cp39-cp39-win_amd64.whl", hash = "sha256:3bdfa6758110f233352b3c9ce7210d0ef7f0da741387702cd9222d3785a5aadf"},
+    {file = "mediapipe-0.9.0-cp310-cp310-macosx_10_15_x86_64.whl", hash = "sha256:a68e35993abe1d1e4eba62a4be6df9476433822262e85639d4ea6262fd2b7117"},
+    {file = "mediapipe-0.9.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:9acde2a48b1d268ade84a02f980e7ec0f1b1881082c344cec460eedd7ebbbdca"},
+    {file = "mediapipe-0.9.0-cp310-cp310-win_amd64.whl", hash = "sha256:e8f6b6f4c531a77087092070ff311ce736ef55df2b928fdb4efa1c5262bf1ed9"},
+    {file = "mediapipe-0.9.0-cp37-cp37m-macosx_10_15_x86_64.whl", hash = "sha256:309a814cab6aa6892af8323a9f427cb8f1e584fb017d621ebb6876172c545b6b"},
+    {file = "mediapipe-0.9.0-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:9ad90244f9bdc02cab38a5ec7017c70fefa6df4bbc69a43910f4aaaa85ff5897"},
+    {file = "mediapipe-0.9.0-cp37-cp37m-win_amd64.whl", hash = "sha256:3517ff7a39b73be07f8729b5952894e094826c4df9d65cd845baf5d19694ed9b"},
+    {file = "mediapipe-0.9.0-cp38-cp38-macosx_10_15_x86_64.whl", hash = "sha256:978717a2b8b48e17d50991eb03a8cabe674751f32dd0c4730861b72ee30b5571"},
+    {file = "mediapipe-0.9.0-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:e530e175131398a045a78f5332368d9c0e7646b24af6bcee1b6ffdf4e877896d"},
+    {file = "mediapipe-0.9.0-cp38-cp38-win_amd64.whl", hash = "sha256:373919560ecf08606c51d1d51d1c56113f2a875d35eaa5bf1a88b6a742e9be2a"},
+    {file = "mediapipe-0.9.0-cp39-cp39-macosx_10_15_x86_64.whl", hash = "sha256:bd36ca3f75dd4cf7e0d3871dcf59db35fd247f968020eb69aa6760f53b7cd8b6"},
+    {file = "mediapipe-0.9.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:73bb00fd5cc339154e43c88451261e3f83c576c4e502426a41dd56dbacbd33d4"},
+    {file = "mediapipe-0.9.0-cp39-cp39-win_amd64.whl", hash = "sha256:f48105ba667a194cf421be7e1042dcc8ce9d93cd27ced81290dec69eaf4198b1"},
 ]
 numpy = [
     {file = "numpy-1.21.2-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:52a664323273c08f3b473548bf87c8145b7513afd63e4ebba8496ecd3853df13"},
