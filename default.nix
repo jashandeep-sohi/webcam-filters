@@ -1,10 +1,10 @@
 {
   nixpkgs ? import ./nixpkgs.nix { },
-  poetry2nix ? import (fetchTarball "https://github.com/nix-community/poetry2nix/archive/refs/tags/1.20.0.tar.gz") { pkgs = nixpkgs; poetry = nixpkgs.poetry; },
+  poetry2nix ? import (fetchTarball "https://github.com/nix-community/poetry2nix/archive/refs/tags/1.36.0.tar.gz") { pkgs = nixpkgs; poetry = nixpkgs.poetry; },
 }:
   poetry2nix.mkPoetryApplication {
     projectDir = ./.;
-    python = nixpkgs.python3;
+    python = nixpkgs.python310;
     preferWheels = true;
 
     overrides = poetry2nix.overrides.withDefaults (self: super: {
@@ -27,8 +27,8 @@
     ];
 
     propagatedBuildInputs = [
-      nixpkgs.python3.pkgs.gst-python
-      nixpkgs.python3.pkgs.pygobject3
+      nixpkgs.python310.pkgs.gst-python
+      nixpkgs.python310.pkgs.pygobject3
     ];
 
   }

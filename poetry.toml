@@ -1,3 +1,2 @@
-[virtualenvs]
 [virtualenvs.options]
 system-site-packages = true
