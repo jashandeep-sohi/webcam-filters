@@ -14,7 +14,7 @@ opencv-contrib-python = "^4.5.3"
 mediapipe = "^0.9.0"
 click = "^8.0.1"
 click-completion = "^0.5.2"
-rich = "^10.7.0"
+rich = ">=10.7,<13.0"
 numpy = "^1.21.2"
 
 [tool.poetry.scripts]
