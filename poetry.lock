@@ -172,7 +172,7 @@ setuptools_scm = ">=7"
 
 [[package]]
 name = "mediapipe"
-version = "0.9.0"
+version = "0.9.0.1"
 description = "MediaPipe is the simplest way for researchers and developers to build world-class ML solutions and applications for mobile, edge, cloud and the web."
 category = "main"
 optional = false
@@ -626,18 +626,19 @@ matplotlib = [
     {file = "matplotlib-3.6.2.tar.gz", hash = "sha256:b03fd10a1709d0101c054883b550f7c4c5e974f751e2680318759af005964990"},
 ]
 mediapipe = [
-    {file = "mediapipe-0.9.0-cp310-cp310-macosx_10_15_x86_64.whl", hash = "sha256:a68e35993abe1d1e4eba62a4be6df9476433822262e85639d4ea6262fd2b7117"},
-    {file = "mediapipe-0.9.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:9acde2a48b1d268ade84a02f980e7ec0f1b1881082c344cec460eedd7ebbbdca"},
-    {file = "mediapipe-0.9.0-cp310-cp310-win_amd64.whl", hash = "sha256:e8f6b6f4c531a77087092070ff311ce736ef55df2b928fdb4efa1c5262bf1ed9"},
-    {file = "mediapipe-0.9.0-cp37-cp37m-macosx_10_15_x86_64.whl", hash = "sha256:309a814cab6aa6892af8323a9f427cb8f1e584fb017d621ebb6876172c545b6b"},
-    {file = "mediapipe-0.9.0-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:9ad90244f9bdc02cab38a5ec7017c70fefa6df4bbc69a43910f4aaaa85ff5897"},
-    {file = "mediapipe-0.9.0-cp37-cp37m-win_amd64.whl", hash = "sha256:3517ff7a39b73be07f8729b5952894e094826c4df9d65cd845baf5d19694ed9b"},
-    {file = "mediapipe-0.9.0-cp38-cp38-macosx_10_15_x86_64.whl", hash = "sha256:978717a2b8b48e17d50991eb03a8cabe674751f32dd0c4730861b72ee30b5571"},
-    {file = "mediapipe-0.9.0-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:e530e175131398a045a78f5332368d9c0e7646b24af6bcee1b6ffdf4e877896d"},
-    {file = "mediapipe-0.9.0-cp38-cp38-win_amd64.whl", hash = "sha256:373919560ecf08606c51d1d51d1c56113f2a875d35eaa5bf1a88b6a742e9be2a"},
-    {file = "mediapipe-0.9.0-cp39-cp39-macosx_10_15_x86_64.whl", hash = "sha256:bd36ca3f75dd4cf7e0d3871dcf59db35fd247f968020eb69aa6760f53b7cd8b6"},
-    {file = "mediapipe-0.9.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:73bb00fd5cc339154e43c88451261e3f83c576c4e502426a41dd56dbacbd33d4"},
-    {file = "mediapipe-0.9.0-cp39-cp39-win_amd64.whl", hash = "sha256:f48105ba667a194cf421be7e1042dcc8ce9d93cd27ced81290dec69eaf4198b1"},
+    {file = "mediapipe-0.9.0.1-cp310-cp310-macosx_10_15_x86_64.whl", hash = "sha256:166dd0c7ccd64188d43d3cc2734b5a9a40a7e22ed373b69adf37103ba0c794c3"},
+    {file = "mediapipe-0.9.0.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:01aa774b6269c4c1b2353ebae2dd02d8356ccfb926b5f76f9b8dbe98fe17fb37"},
+    {file = "mediapipe-0.9.0.1-cp310-cp310-win_amd64.whl", hash = "sha256:64c1733862a1bc3be97b8fb7f9553e76347e3b9d7a0944372bb0ca0bd5f81da3"},
+    {file = "mediapipe-0.9.0.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:31d3857f13610d5a6f4445b3736bd31b915b9b16211289bac1ee583f96bdae47"},
+    {file = "mediapipe-0.9.0.1-cp37-cp37m-macosx_10_15_x86_64.whl", hash = "sha256:84b38dcf41e81281576380804456d25c3b0cd40b262b4916e1c84b524e955bd2"},
+    {file = "mediapipe-0.9.0.1-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:ea5d645adf404d90054d62c62c99cd07dc02abb51e2e7d2b503db3e610e5615b"},
+    {file = "mediapipe-0.9.0.1-cp37-cp37m-win_amd64.whl", hash = "sha256:a06d31ebb9a5255b5e2be369df9f5fdce3252c3b922597fb0ec024df7237694e"},
+    {file = "mediapipe-0.9.0.1-cp38-cp38-macosx_10_15_x86_64.whl", hash = "sha256:208adb81043e9f7340602f93647b90e7e92a93fa46d84f6ec3fbef03b754d65a"},
+    {file = "mediapipe-0.9.0.1-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:290e2dbdab25858a8f5f41a429d11341fe348e3229f7ef52ac9a5efdeb17e192"},
+    {file = "mediapipe-0.9.0.1-cp38-cp38-win_amd64.whl", hash = "sha256:57ff0e05bc18ef34acef15733c119982c674f04863a26016ddf91fb5d5214290"},
+    {file = "mediapipe-0.9.0.1-cp39-cp39-macosx_10_15_x86_64.whl", hash = "sha256:1a41677ac5ce7ae73eee75421a675d89daf913fdc99859d10fd50ff0f436ed7e"},
+    {file = "mediapipe-0.9.0.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:ab59e952b30e0d0f4f1ed072addfc26e3ee52cf9808ef6a50067ae2f59bd83b6"},
+    {file = "mediapipe-0.9.0.1-cp39-cp39-win_amd64.whl", hash = "sha256:7087122bc44037bd9acc604dd138cc4df4ef898752959ad35a40e311dbfa2009"},
 ]
 numpy = [
     {file = "numpy-1.23.4-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:95d79ada05005f6f4f337d3bb9de8a7774f259341c70bc88047a1f7b96a4bcb2"},
