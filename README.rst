@@ -37,7 +37,7 @@ v4l2loopback
 ************
 `v4l2loopback` kernel module is required to emulate a virtual webcam. See your
 distro's docs or v4l2loopback_ on how to install and set it up
-(e.g. https://archlinux.org/packages/community/any/v4l2loopback-dkms/).
+(e.g. https://archlinux.org/packages/extra/any/v4l2loopback-dkms/).
 
 You'll probably want to create at least one loopback device (that's persistent
 on boot)::
