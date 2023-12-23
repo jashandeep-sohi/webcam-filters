@@ -54,6 +54,6 @@ jobs:
 
       - name: Tag & push
         run: |
-          for tag in ${{ steps.meta.outputs.tags }}; do
+          echo '${{ steps.meta.outputs.tags }}' | while IFS= read -r tag; do
             docker tag webcam-filters:latest $tag
           done
