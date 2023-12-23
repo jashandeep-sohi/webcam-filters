@@ -9,10 +9,10 @@ jobs:
   nix-build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: cachix/install-nix-action@v22
-      - uses: cachix/cachix-action@v12
+      - uses: actions/checkout@v4
+      - uses: cachix/install-nix-action@v24
         with:
-          name: sohi
-          skipPush: true
-      - run: nix-build
+          extra_nix_config: |
+            accept-flake-config = true
+
+      - run: nix build
