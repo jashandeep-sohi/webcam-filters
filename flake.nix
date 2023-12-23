@@ -44,7 +44,7 @@
               "--output-dev" "/output-dev"
             ];
           };
-          maxLayers = 5;
+          maxLayers = 6;
           layers = [
             (nix2container.buildLayer { deps = [ config.packages.default.dependencyEnv ]; maxLayers = 5; })
           ];
