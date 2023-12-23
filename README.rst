@@ -72,23 +72,19 @@ Nix
 The provided Nix_ package bundles all the necessary GStreamer dependencies and
 should "just work" on any distro.
 
-Setup the cache. This step is **optional**, but it should speed up
-the installation process::
-
-  $ nix-env -iA cachix -f https://cachix.org/api/v1/install
-  $ cachix use sohi
-
 Install a specific release version/tag::
 
-  $ nix-env \
-      --install \
-      --file https://github.com/jashandeep-sohi/webcam-filters/archive/refs/tags/v0.3.0.tar.gz
+  $ nix --experimental-features 'nix-command flakes' \
+      profile
+      install
+      github:jashandeep-sohi/webcam-filters/vx.x.x
 
 Install a specific branch (e.g. ``master``)::
 
-  $ nix-env \
-      --install \
-      --file https://github.com/jashandeep-sohi/webcam-filters/archive/refs/heads/master.tar.gz
+  $ nix --experimental-features 'nix-command flakes' \
+      profile
+      install
+      github:jashandeep-sohi/webcam-filters/master
 
 Hardware Acceleration
 .....................
@@ -147,7 +143,7 @@ You can retag the image locally if you don't want to refer to the long name::
 
 You may also build the image locally::
 
-  $ docker build -t webcam-filters .
+  $ nix --experimental-features 'nix-command flakes' run .#container.copyToDockerDaemon
 
 
 .. [#] Zoom desktop client supports background blur as of version 5.7.6. Zoom on web does not.

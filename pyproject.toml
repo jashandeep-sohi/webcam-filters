@@ -9,7 +9,7 @@ repository = "https://github.com/jashandeep-sohi/webcam-filters"
 keywords = ["webcam", "filters", "v4l2", "video-conferencing"]
 
 [tool.poetry.dependencies]
-python = ">=3.8"
+python = "^3.8"
 opencv-contrib-python = "^4.5.3"
 mediapipe = "^0.9.0"
 click = "^8.0.1"
