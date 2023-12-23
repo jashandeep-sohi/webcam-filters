@@ -46,7 +46,7 @@
           };
           maxLayers = 5;
           layers = [
-            (nix2container.buildLayer { deps = [ config.packages.default.dependencyEnv ]; })
+            (nix2container.buildLayer { deps = [ config.packages.default.dependencyEnv ]; maxLayers = 5; })
           ];
         };
 
