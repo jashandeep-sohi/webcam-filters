@@ -35,7 +35,7 @@
         };
 
         packages.container = with inputs'.nix2container.packages; nix2container.buildImage {
-          name = "webcam-filter";
+          name = "webcam-filters";
           tag = "latest";
           config = {
             entrypoint = [
