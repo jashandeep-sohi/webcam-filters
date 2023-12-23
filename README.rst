@@ -28,6 +28,13 @@ Hardware acceleration (via VAAPI)::
 
   $ webcam-filters --input-dev /dev/video0 --output-dev /dev/video3 --background-blur 150 --hw-accel-api vaapi
 
+Using docker::
+
+  $ docker run -it \
+    --device=/dev/video0:/input-dev \
+    --device=/dev/video3:/output-dev \
+    ghcr.io/jashandeep-sohi/webcam-filters:master --background-blur 50
+
 Dependencies
 ------------
 Other than the Python dependencies that can be automatically installed by Pip,
@@ -129,13 +136,6 @@ Git::
 Docker
 ******
 The docker container wraps a Nix installation for those who prefer to have it dockerized.
-
-Usage example::
-
-  $ docker run -it \
-    --device=/dev/video0:/input-dev \
-    --device=/dev/video3:/output-dev \
-    ghcr.io/jashandeep-sohi/webcam-filters:master --background-blur 50
 
 You can retag the image locally if you don't want to refer to the long name::
 
