@@ -24,10 +24,34 @@
   outputs = inputs@{ flake-parts, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [ "x86_64-linux" "aarch64-linux" "aarch64-darwin" "x86_64-darwin" ];
-      perSystem = { pkgs, config, inputs', ... }:
+      perSystem = { pkgs, config, inputs', lib, ... }:
       let
         poetry2nix = inputs.poetry2nix.lib.mkPoetry2Nix { inherit pkgs; };
-      in
+        propagatedBuildInputs = [
+          pkgs.gst_all_1.gstreamer
+          pkgs.gst_all_1.gst-plugins-base
+          pkgs.gst_all_1.gst-plugins-good
+          pkgs.python311.pkgs.gst-python
+          pkgs.python311.pkgs.pygobject3
+        ];
+        python = pkgs.python311;
+        app = poetry2nix.mkPoetryApplication {
+          projectDir = inputs.self;
+          inherit python;
+          preferWheels = true;
+
+          overrides = poetry2nix.overrides.withDefaults (self: super: {
+            cython = null;
+          });
+
+          nativeBuildInputs = [
+            pkgs.wrapGAppsNoGuiHook
+            pkgs.gobject-introspection
+          ];
+
+          inherit propagatedBuildInputs;
+        };
+     in
       {
         devShells.default = pkgs.mkShell {
           inputsFrom = [ config.packages.default ];
@@ -39,40 +63,32 @@
           tag = "latest";
           config = {
             entrypoint = [
-              "${config.packages.default}/bin/webcam-filters"
+              "${app}/bin/webcam-filters"
               "--input-dev" "/input-dev"
               "--output-dev" "/output-dev"
             ];
           };
-          maxLayers = 6;
-          layers = [
-            (nix2container.buildLayer { deps = [ config.packages.default.dependencyEnv ]; maxLayers = 5; })
+          layers = let
+            foldImageLayers = let
+                mergeToLayer = priorLayers: component:
+                  assert builtins.isList priorLayers;
+                  assert builtins.isAttrs component; let
+                    layer = nix2container.buildLayer (component
+                      // {
+                        layers = priorLayers;
+                      });
+                  in
+                    priorLayers ++ [layer];
+              in
+                layers: lib.foldl mergeToLayer [] layers;
+          in foldImageLayers [
+            { deps = [ python ]; }
+            { deps = propagatedBuildInputs; }
+            { deps = builtins.filter (x: lib.strings.hasInfix "mediapipe" x.pname) app.propagatedBuildInputs; }
           ];
         };
 
-        packages.default = poetry2nix.mkPoetryApplication {
-          projectDir = inputs.self;
-          python = pkgs.python311;
-          preferWheels = true;
-
-          overrides = poetry2nix.overrides.withDefaults (self: super: {
-            cython = null;
-          });
-
-          nativeBuildInputs = [
-            pkgs.wrapGAppsHook
-            pkgs.gobject-introspection
-          ];
-
-          propagatedBuildInputs = [
-            pkgs.gst_all_1.gstreamer
-            pkgs.gst_all_1.gst-plugins-base
-            pkgs.gst_all_1.gst-plugins-good
-            pkgs.gst_all_1.gst-vaapi
-            pkgs.python311.pkgs.gst-python
-            pkgs.python311.pkgs.pygobject3
-          ];
-        };
+        packages.default = app.overrideAttrs (prev: { propagatedBuildInputs = prev.propagatedBuildInputs ++ [pkgs.gst_all_1.gst-vaapi]; });
       };
     };
 }
